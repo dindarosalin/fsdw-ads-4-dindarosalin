@@ -1,15 +1,15 @@
 @extends('layouts.app')
   
-@section('title', 'Create Product')
+@section('title', 'Create Travel')
   
 @section('contents')
-    <h1 class="mb-0">Add Product</h1>
+    <h1 class="mb-0">Add Travel</h1>
     <hr />
-    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('travels.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row mb-3">
             <div class="col">
-                <input type="text" name="title" class="form-control" placeholder="Title">
+                <input type="text" name="name" class="form-control" placeholder="Name">
             </div>
             <div class="col">
                 <input type="text" name="price" class="form-control" placeholder="Price">
@@ -17,11 +17,13 @@
         </div>
         <div class="row mb-3">
             <div class="col">
-                <input type="text" name="product_code" class="form-control" placeholder="Product Code">
+                <input type="text" name="destination" class="form-control" placeholder="Destination">
             </div>
             <div class="col">
-                <textarea class="form-control" name="description" placeholder="Descriptoin"></textarea>
-            </div>
+    <label for="departure_time">Departure Time</label>
+    <input type="time" class="form-control" id="departure_time" name="departure_time" placeholder="Departure Time">
+</div>
+
         </div>
  
         <div class="row">

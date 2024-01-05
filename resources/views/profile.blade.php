@@ -1,4 +1,3 @@
-//resources/views/profile.blade.php
 @extends('layouts.app')
   
 @section('title', 'Profile')
@@ -6,8 +5,9 @@
 @section('contents')
     <h1 class="mb-0">Profile</h1>
     <hr />
- 
-    <form method="POST" enctype="multipart/form-data" id="profile_setup_frm" action="" >
+    <form method="POST" enctype="multipart/form-data" id="profile_setup_frm" action="{{ route('updateProfile', $user->id) }}" >
+    @method('POST')
+    @csrf
     <div class="row">
         <div class="col-md-12 border-right">
             <div class="p-3 py-5">

@@ -1,4 +1,3 @@
-//resources/views/products/edit.blade.php
 @extends('layouts.app')
   
 @section('title', 'Edit Product')

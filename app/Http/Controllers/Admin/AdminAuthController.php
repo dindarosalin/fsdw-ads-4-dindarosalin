@@ -69,6 +69,24 @@ class AdminAuthController extends Controller
  
     public function profile()
     {
-        return view('profile');
+        $user = User::findOrFail(Auth::id());
+        return view('profile', compact('user'));
     }
+
+    public function updateProfile(Request $request, $id)
+    {
+        request()->validate([
+            'name'          => 'required|string|min:2|max:100',
+        ]);
+
+        $user = User::find($id);
+
+        $user->name = $request->name;
+
+        $user->save();
+
+        return view('dashboard');
+    }
+
+
 }

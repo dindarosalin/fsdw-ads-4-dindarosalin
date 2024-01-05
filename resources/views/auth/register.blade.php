@@ -1,4 +1,3 @@
-//resources/views/auth/register.blade.php
 <!DOCTYPE html>
 <html lang="en">
 <head>

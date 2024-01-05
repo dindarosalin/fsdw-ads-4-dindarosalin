@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\TravelController;
  
 Route::get('/', function () {
     return view('welcome');
@@ -32,6 +33,17 @@ Route::middleware('auth')->group(function () {
         Route::put('edit/{id}', 'update')->name('products.update');
         Route::delete('destroy/{id}', 'destroy')->name('products.destroy');
     });
+
+    Route::controller(TravelController::class)->prefix('travels')->group(function () {
+        Route::get('', 'index')->name('travels');
+        Route::get('create', 'create')->name('travels.create');
+        Route::post('store', 'store')->name('travels.store');
+        Route::get('show/{id}', 'show')->name('travels.show');
+        Route::get('edit/{id}', 'edit')->name('travels.edit');
+        Route::put('edit/{id}', 'update')->name('travels.update');
+        Route::delete('destroy/{id}', 'destroy')->name('travels.destroy');
+    });
  
-    Route::get('/profile', [App\Http\Controllers\AdminAuthController::class, 'profile'])->name('profile');
+    Route::get('/profile', [AdminAuthController::class, 'profile'])->name('profile');
+    Route::post('/profile/{id}', [AdminAuthController::class, 'updateProfile'])->name('updateProfile');
 });
