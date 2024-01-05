@@ -1,66 +1,126 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LAPORAN TEST CASE - FSDW4 Travel Now App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## DINDA ROSALIN HUSNA
 
-## About Laravel
+### Deskripsi Aplikasi
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplikasi Travel Now adalah sebuah aplikasi pemesanan perjalanan yang menyediakan fitur-fitur berikut:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Autentikasi Pengguna
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Register**
+  - Validasi Tipe Email
+  - Peringatan Kriteria Password
+  - Redireksi ke Halaman Login setelah Registrasi Berhasil
 
-## Learning Laravel
+- **Login**
+  - Memberikan Peringatan jika Email atau Password Salah
+  - Redireksi ke Dashboard setelah Login Berhasil
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Update Profil**
+  - Pengguna hanya dapat memperbarui Nama
+  - Akses Melalui Sidebar dan Icon Profil
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Logout**
+  - Pengguna Diarahkan ke Halaman Login Setelah Logout
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Manajemen Travel
 
-## Laravel Sponsors
+- **List Travel dengan Filter**
+  - Filter Berdasarkan Harga, Asal/Tujuan, Waktu Keberangkatan
+  - Tampilan Halaman Travel Menampilkan Nama Agen, Harga, Tujuan, dan Waktu Keberangkatan
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **Detail Travel**
+  - Informasi Detail Travel dengan Kemungkinan Penambahan Atribut Lain
 
-### Premium Partners
+- **Booking Travel (Checkout)**
+  - Proses Booking Travel dengan Mengisi Nama Penumpang dan Titik Penjemputan
+  - Data Dikirim ke Backend dan Disimpan dalam Database Checkout
+  - Halaman Detail Checkout Menampilkan Semua Checkout yang Berhasil
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+#### API
 
-## Contributing
+- **Register, Login, Logout**
+  - Mendapatkan Token Setelah Login Berhasil
+  - Mendapatkan Detail Pengguna
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Update User**
+  - Memberikan Respons 200 OK jika Berhasil Diupdate
 
-## Code of Conduct
+- **Get Travels & Get Travel By ID**
+  - Mengambil Data Travels dan Travel Berdasarkan ID dari Database
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Booking Travel (Checkout)**
+  - Proses Booking Travel Melalui API
 
-## Security Vulnerabilities
+### Cara Menjalankan Aplikasi di Local
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Persyaratan & Tools
 
-## License
+- Laravel 10.x
+- PHP 8.2
+- Bootstrap 5.x -> Styling
+- Postman -> Test Api
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Langkah-langkah
+
+1. Clone repository `fsdw-ads-4-dindarosalin`
+2. Jalankan XAMPP/Sesuaikan dengan konfigurasi mesin
+3. Buat Database `fsdwa-ads-4` di PHPMyadmin atau sesuaikan file `.env-example`
+4. Migrate Database dengan perintah `php artisan migrate`
+5. Import Data Dummy dari `fsdw-ads-4\database\dummy-sql\dummy500.sql`
+6. Jalankan Aplikasi dengan perintah `php artisan serve`
+
+### Detail Kode Program
+
+#### Fitur Filter Data
+# Routes API - Travel Now App
+
+Berikut adalah penjelasan singkat untuk setiap route dalam file `routes/API.php`:
+
+1. `/register` (POST)
+   - Endpoint untuk mendaftarkan pengguna baru.
+   - Mengarah ke metode `registerSave` dalam `AuthController`.
+
+2. `/login` (POST)
+   - Endpoint untuk proses login pengguna.
+   - Mengarah ke metode `loginAction` dalam `AuthController`.
+
+3. `/logout` (POST)
+   - Endpoint untuk proses logout pengguna.
+   - Mengarah ke metode `logout` dalam `AuthController`.
+   - Memerlukan autentikasi melalui middleware `auth:sanctum`.
+
+4. `/user` (GET)
+   - Endpoint untuk mendapatkan detail pengguna yang sedang login.
+   - Mengembalikan informasi pengguna saat ini.
+   - Memerlukan autentikasi melalui middleware `auth:sanctum`.
+
+5. `/travels` (GET)
+   - Endpoint untuk mendapatkan daftar perjalanan/travel.
+   - Mengarah ke metode `index` dalam `TravelController`.
+   - Memerlukan autentikasi melalui middleware `auth:sanctum`.
+
+6. `/travel/{id}` (GET)
+   - Endpoint untuk mendapatkan detail perjalanan/travel berdasarkan ID.
+   - Mengarah ke metode `show` dalam `TravelController`.
+   - Memerlukan autentikasi melalui middleware `auth:sanctum`.
+
+7. `/travel/checkout` (POST)
+   - Endpoint untuk melakukan proses booking travel.
+   - Mengarah ke metode `processCheckout` dalam `TravelController`.
+   - Memerlukan autentikasi melalui middleware `auth:sanctum`.
+
+8. `/user/checkout` (POST)
+   - Endpoint untuk mendapatkan data checkout pengguna.
+   - Mengarah ke metode `userCheckout` dalam `TravelController`.
+   - Memerlukan autentikasi melalui middleware `auth:sanctum`.
+
+9. `/profile/{id}` (PUT)
+   - Endpoint untuk memperbarui profil pengguna.
+   - Mengarah ke metode `updateProfile` dalam `AuthController`.
+   - Memerlukan autentikasi melalui middleware `auth:sanctum`.
+
+Kumpulan route ini menangani autentikasi, manajemen pengguna, dan operasi terkait perjalanan dalam aplikasi. Beberapa endpoint memerlukan autentikasi untuk diakses, yang diatur melalui middleware `auth:sanctum`.
+
+
