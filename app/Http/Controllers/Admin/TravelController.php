@@ -75,7 +75,6 @@ class TravelController extends Controller
     {
         $userId = Auth::id();
         $userCheckouts = Checkout::where('user_id', $userId)->get();
-        return($userCheckouts);
 
         return view('travels.checkout_list', compact('userCheckouts'));
     }
