@@ -8,13 +8,30 @@ use App\Models\Travel;
 
 class TravelController extends Controller
 {
-    public function index()
+        public function index(Request $request)
     {
-        $travel = Travel::orderBy('created_at', 'DESC')->get();
-  
+        $travels = Travel::query();
+
+        // filter by price range
+        $travels->when($request->price_range, function ($query) use ($request) {
+            $priceRange = explode('-', $request->price_range);
+            return $query->whereBetween('price', [$priceRange[0], $priceRange[1]]);
+        });
+
+        // filter by destination
+        $travels->when($request->destination, function ($query) use ($request) {
+            return $query->where('destination', 'like', '%' . $request->destination . '%');
+        });
+
+        // filter by departure Time
+        $travels->when($request->departure_time, function ($query) use ($request) {
+            return $query->where('departure_time', $request->departure_time);
+        });
+
+        $travel = $travels->orderBy('created_at', 'DESC')->get();
         return view('travels.index', compact('travel'));
     }
-  
+
     /**
      * Show the form for creating a new resource.
      */
@@ -22,20 +39,14 @@ class TravelController extends Controller
     {
         return view('travels.create');
     }
-  
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         Travel::create($request->all());
  
         return redirect()->route('travels')->with('success', 'Travel added successfully');
     }
-  
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         $travel = Travel::findOrFail($id);
@@ -43,9 +54,6 @@ class TravelController extends Controller
         return view('travels.show', compact('travel'));
     }
   
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $travel = Travel::findOrFail($id);
@@ -53,9 +61,6 @@ class TravelController extends Controller
         return view('travels.edit', compact('travel'));
     }
   
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $travel = Travel::findOrFail($id);
@@ -65,9 +70,6 @@ class TravelController extends Controller
         return redirect()->route('travels')->with('success', 'travel updated successfully');
     }
   
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $travel = Travel::findOrFail($id);

@@ -1,12 +1,37 @@
 @extends('layouts.app')
   
-@section('title', 'Home Travel')
+@section('title', 'Available Travel')
   
 @section('contents')
-    <div class="d-flex align-items-center justify-content-between">
-        <h1 class="mb-0">List Travel</h1>
-        <a href="{{ route('travels.create') }}" class="btn btn-primary">Add Travel</a>
-    </div>
+    <form action="/travels" method="get">
+        @csrf
+        <div class="row mb-3">
+            <div class="col-sm-4">
+                <label for="" class="form-label">Price Range</label>
+                <div class="form-select">
+                    <select name="price_range" class="form-select"> 
+                        <option value="">Select Price Range</option>
+                        <option value="500-1000">500 - 1000</option>
+                        <option value="1001-2000">1001 - 2000</option>
+                        <option value="2001-3000">2001 - 3000</option>
+                        <option value="3001-4000">3001 - 4000</option>
+                        <option value="4001-5000">4001 - 5000</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label for="" class="form-label">Destination</label>
+                <input name="destination" type="text" class="form-control" placeholder="Destination" value="{{isset($_GET['name']) ? $_GET['name'] : ''}}">  
+            </div>
+            <div class="col-sm-4">
+                <label for="" class="form-label">Departure Time</label>
+                <input name="departure_time" type="time" class="form-control" placeholder="Departure Time" value="{{isset($_GET['name']) ? $_GET['name'] : ''}}">  
+            </div>
+            <div class="col-sm-3">
+                <button type="submit" class="btn btn-primary mt-4">Search</button>
+            </div>
+        </div>
+    </form>
     <hr />
     @if(Session::has('success'))
         <div class="alert alert-success" role="alert">
@@ -34,15 +59,7 @@
                         <td class="align-middle">{{ $rs->destination }}</td>
                         <td class="align-middle">{{ $rs->departure_time }}</td>  
                         <td class="align-middle">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{{ route('travels.show', $rs->id) }}" type="button" class="btn btn-secondary">Detail</a>
-                                <a href="{{ route('travels.edit', $rs->id)}}" type="button" class="btn btn-warning">Edit</a>
-                                <form action="{{ route('travels.destroy', $rs->id) }}" method="POST" type="button" class="btn btn-danger p-0" onsubmit="return confirm('Delete?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger m-0">Delete</button>
-                                </form>
-                            </div>
+                            <button class="btn btn-success m-0">Book Now</button>
                         </td>
                     </tr>
                 @endforeach

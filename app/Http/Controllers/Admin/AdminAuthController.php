@@ -46,25 +46,22 @@ class AdminAuthController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ])->validate();
-  
+
         if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed')
             ]);
         }
-  
+
         $request->session()->regenerate();
-  
         return redirect()->route('dashboard');
     }
   
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
-  
         $request->session()->invalidate();
-  
-        return redirect('/');
+        return redirect('login');
     }
  
     public function profile()
@@ -76,17 +73,12 @@ class AdminAuthController extends Controller
     public function updateProfile(Request $request, $id)
     {
         request()->validate([
-            'name'          => 'required|string|min:2|max:100',
+            'name' => 'required|string|min:2|max:100',
         ]);
 
         $user = User::find($id);
-
         $user->name = $request->name;
-
         $user->save();
-
         return view('dashboard');
     }
-
-
 }
