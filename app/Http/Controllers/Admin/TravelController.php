@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Travel;
+use App\Models\Checkout;
+use Illuminate\Support\Facades\Auth;
 
 class TravelController extends Controller
 {
@@ -53,29 +55,44 @@ class TravelController extends Controller
   
         return view('travels.show', compact('travel'));
     }
-  
-    public function edit(string $id)
+
+    public function processCheckout(Request $request)
     {
-        $travel = Travel::findOrFail($id);
-  
-        return view('travels.edit', compact('travel'));
+        $request->validate([
+            'passenger_name' => 'required',
+            'departure_point' => 'required',
+            // Add other validation rules as needed
+        ]);
+
+        $checkoutData = [
+            'passenger_name' => $request->passenger_name,
+            'departure_point' => $request->departure_point,
+            'user_id' => $request->user_id,
+            'travel_id' => $request->travel_id,
+            'price' => Travel::findOrFail($request->travel_id)->price, // Get travel price
+            // Other checkout data as needed
+        ];
+
+        Checkout::create($checkoutData);
+
+        // Retrieve checkout data for the logged-in user
+        $userCheckouts = Checkout::where('user_id', $request->user_id)->get();
+
+        // Display the checkout details for the user
+        return view('travels.user_checkout', compact('userCheckouts'));
     }
-  
-    public function update(Request $request, string $id)
+
+    public function checkout($id)
     {
         $travel = Travel::findOrFail($id);
-  
-        $travel->update($request->all());
-  
-        return redirect()->route('travels')->with('success', 'travel updated successfully');
+        return view('travels.checkout', compact('travel'));
     }
-  
-    public function destroy(string $id)
+
+    public function userCheckout()
     {
-        $travel = Travel::findOrFail($id);
-  
-        $travel->delete();
-  
-        return redirect()->route('travels')->with('success', 'travel deleted successfully');
+        $userId = Auth::id();
+        $userCheckouts = Checkout::where('user_id', $userId)->get();
+
+        return view('travels.checkout_list', compact('userCheckouts'));
     }
 }

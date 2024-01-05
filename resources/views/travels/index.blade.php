@@ -59,7 +59,11 @@
                         <td class="align-middle">{{ $rs->destination }}</td>
                         <td class="align-middle">{{ $rs->departure_time }}</td>  
                         <td class="align-middle">
-                            <button class="btn btn-success m-0">Book Now</button>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="{{ route('travels.show', $rs->id) }}" type="button" class="btn btn-secondary">Detail</a>
+                            <a href="{{ route('travels.checkout', $rs->id)}}" type="button" class="btn btn-warning">Book Now</a>
+                        </div>
+
                         </td>
                     </tr>
                 @endforeach

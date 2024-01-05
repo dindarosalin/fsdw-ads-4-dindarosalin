@@ -17,19 +17,19 @@
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>
-  
-  <li class="nav-item">
-    <a class="nav-link" href="{{ route('products') }}">
-      <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Product</span></a>
-  </li>
 
   <li class="nav-item">
     <a class="nav-link" href="{{ route('travels') }}">
       <i class="fas fa-regular fa-car-side"></i>
       <span>Travels</span></a>
   </li>
-  
+    
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('user_checkout') }}">
+    <i class="fas fa-solid fa-plane-departure"></i>
+      <span>Your Booking</span></a>
+  </li>
+
   <li class="nav-item">
     <a class="nav-link" href="/profile">
       <i class="fas fa-regular fa-user"></i>
