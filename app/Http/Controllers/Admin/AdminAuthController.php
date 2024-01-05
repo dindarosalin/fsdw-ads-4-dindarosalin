@@ -19,20 +19,18 @@ class AdminAuthController extends Controller
   
     public function registerSave(Request $request)
     {
-        Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8'
-        ])->validate();
+        ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
-  
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        // Jika validasi gagal, Laravel akan secara otomatis menangani responsnya
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
             'level' => 'Client'
         ]);
   
@@ -68,7 +66,7 @@ class AdminAuthController extends Controller
     {
         $request->user()->tokens()->delete();
 
-        return view('auth/login');
+        return redirect()->route('login');
     }
 
     public function updateProfile(Request $request, $id)

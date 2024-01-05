@@ -1,6 +1,6 @@
 @extends('layouts.app')
   
-@section('title', 'Show Product')
+@section('title', 'Trip Details')
   
 @section('contents')
 <!-- Display travel information -->
@@ -13,18 +13,20 @@
 <!-- Form for checkout details -->
 <form action="{{ route('process_checkout') }}" method="POST">
     @csrf
-    <!-- Include input fields for checkout details like name, email, etc. -->
+    <div class="row mb-3">
     <input type="hidden" name="travel_id" value="{{ $travel->id }}">
-    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}"> <!-- Assuming user is logged in -->
+    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+        <div class="col-md-4">
+            <label for="passenger_name">Passenger Name:</label>
+            <input type="text" id="passenger_name" name="passenger_name" class="form-control" required>
+        </div>  
+        <div class="col-md-4">
+            <label for="departure_point">Departure Point:</label>
+            <input type="text" id="departure_point" name="departure_point" class="form-control" required>
+        </div>
+    </div>    
     
-    <label for="passenger_name">Passenger Name:</label>
-    <input type="text" id="passenger_name" name="passenger_name" required><br><br>
-    
-    <label for="departure_point">Departure Point:</label>
-    <input type="text" id="departure_point" name="departure_point" required><br><br>
-    <!-- Other checkout form fields here -->
-    
-    <button type="submit">Checkout</button>
+    <button type="submit" class="btn btn-primary">Checkout</button>
 </form>
 
 @endsection

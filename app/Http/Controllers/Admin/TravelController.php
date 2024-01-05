@@ -34,21 +34,6 @@ class TravelController extends Controller
         return view('travels.index', compact('travel'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('travels.create');
-    }
-
-    public function store(Request $request)
-    {
-        Travel::create($request->all());
- 
-        return redirect()->route('travels')->with('success', 'Travel added successfully');
-    }
-
     public function show(string $id)
     {
         $travel = Travel::findOrFail($id);
@@ -61,10 +46,8 @@ class TravelController extends Controller
         $request->validate([
             'passenger_name' => 'required',
             'departure_point' => 'required',
-            // Add other validation rules as needed
         ]);
 
-        // Get authenticated user
         $user = Auth::user();
 
         $checkoutData = [
@@ -72,8 +55,7 @@ class TravelController extends Controller
             'departure_point' => $request->departure_point,
             'user_id' => $user->id,
             'travel_id' => $request->travel_id,
-            'price' => Travel::findOrFail($request->travel_id)->price, // Get travel price
-            // Other checkout data as needed
+            'price' => Travel::findOrFail($request->travel_id)->price, 
         ];
 
         Checkout::create($checkoutData);
@@ -93,6 +75,7 @@ class TravelController extends Controller
     {
         $userId = Auth::id();
         $userCheckouts = Checkout::where('user_id', $userId)->get();
+        return($userCheckouts);
 
         return view('travels.checkout_list', compact('userCheckouts'));
     }
