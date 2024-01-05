@@ -1,67 +1,98 @@
 <?php
-
-namespace App\Http\Controllers\Api;
+  
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register()
     {
-        $validator = Validator::make($request->all(), [
+        return view('auth/register');
+    }
+  
+    public function registerSave(Request $request)
+    {
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
+        // Jika validasi gagal, Laravel akan secara otomatis menangani responsnya
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'level' => 'Client'
         ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
+  
         return response()->json([
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
+            'user' => $user,
+        ], 200);
     }
-
-    public function login(Request $request)
+  
+    public function login()
     {
-        if (! Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+        return view('auth/login');
+    }
+  
+    public function loginAction(Request $request)
+    {
+        Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
+        ])->validate();
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
 
-        $user = User::where('email', $request->email)->firstOrFail();
-
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Login success',
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
+            'user' => $user,
+            'token' => $token
+        ], 200);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::user()->tokens()->delete();
+        $request->user()->tokens()->delete();
+
         return response()->json([
-            'message' => 'logout success'
+            'message' => 'Logged out successfully'
+        ], 200);
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        request()->validate([
+            'name' => 'required|string|min:2|max:100',
         ]);
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->save();
+        return response()->json([
+            'user' => $user,
+        ], 200);
+    }
+ 
+    public function profile()
+    {
+        $user = User::findOrFail(Auth::id());
+        return view('profile', compact('user'));
     }
 }

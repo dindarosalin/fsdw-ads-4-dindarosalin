@@ -20,16 +20,20 @@ class AdminAuthController extends Controller
     public function registerSave(Request $request)
     {
         Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:8'
         ])->validate();
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
   
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'level' => 'Admin'
+            'level' => 'Client'
         ]);
   
         return redirect()->route('login');
@@ -47,27 +51,24 @@ class AdminAuthController extends Controller
             'password' => 'required'
         ])->validate();
 
-        if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed')
+                'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        $request->session()->regenerate();
-        return redirect()->route('dashboard');
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return view('dashboard');
     }
-  
+
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        return redirect('login');
-    }
- 
-    public function profile()
-    {
-        $user = User::findOrFail(Auth::id());
-        return view('profile', compact('user'));
+        $request->user()->tokens()->delete();
+
+        return view('auth/login');
     }
 
     public function updateProfile(Request $request, $id)
@@ -80,5 +81,11 @@ class AdminAuthController extends Controller
         $user->name = $request->name;
         $user->save();
         return view('dashboard');
+    }
+ 
+    public function profile()
+    {
+        $user = User::findOrFail(Auth::id());
+        return view('profile', compact('user'));
     }
 }

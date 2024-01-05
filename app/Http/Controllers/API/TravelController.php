@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TravelController extends Controller
 {
-        public function index(Request $request)
+    public function index(Request $request)
     {
         $travels = Travel::query();
 
@@ -31,29 +31,17 @@ class TravelController extends Controller
         });
 
         $travel = $travels->orderBy('created_at', 'DESC')->get();
-        return view('travels.index', compact('travel'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('travels.create');
-    }
-
-    public function store(Request $request)
-    {
-        Travel::create($request->all());
- 
-        return redirect()->route('travels')->with('success', 'Travel added successfully');
+        return response()->json([
+            'travel' => $travel,
+        ]);
     }
 
     public function show(string $id)
     {
         $travel = Travel::findOrFail($id);
-  
-        return view('travels.show', compact('travel'));
+        return response()->json([
+            'travel' => $travel,
+        ]);
     }
 
     public function processCheckout(Request $request)
@@ -61,7 +49,6 @@ class TravelController extends Controller
         $request->validate([
             'passenger_name' => 'required',
             'departure_point' => 'required',
-            // Add other validation rules as needed
         ]);
 
         // Get authenticated user
@@ -73,14 +60,13 @@ class TravelController extends Controller
             'user_id' => $user->id,
             'travel_id' => $request->travel_id,
             'price' => Travel::findOrFail($request->travel_id)->price, // Get travel price
-            // Other checkout data as needed
         ];
 
         Checkout::create($checkoutData);
 
         $userCheckouts = Checkout::where('user_id', $user->id)->get();
 
-        return view('travels.user_checkout', compact('userCheckouts'));
+        return response()->json(['message' => 'Checkout processed successfully'], 201);
     }
 
     public function checkout($id)
